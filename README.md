@@ -1,1 +1,1 @@
-"# Darknet-Detector-Class" 
+"# Darknet-Detector-Classifier-class" 
