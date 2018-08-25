@@ -11,7 +11,11 @@ git status
 git add changed_file_names
 git commit -m "ReadMe.md file is changed with github instructions"
 git push
+#done
+
 #next time u dont have to clone, inorder to update local folder with contents in repository, use pull command.
+git pull
+#edit code
 git pull
 
 
