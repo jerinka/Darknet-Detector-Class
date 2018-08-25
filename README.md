@@ -13,10 +13,16 @@ git commit -m "ReadMe.md file is changed with github instructions"
 git push
 #done
 
+<<<<<<< HEAD
 #next time u dont have to clone, inorder to update local folder with contents in repository, use pull command.
 git pull
 #edit code
 git diff
+=======
+#next time u dont have to clone, inorder to update local folder with contents in repository, use pull command
+git pull
+>>>>>>> 0520ef945777fdc0b107a329be00e6994f267c15
+
 
 
 
