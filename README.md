@@ -10,5 +10,7 @@ git status
 git add changed_file_names
 git commit -m "ReadMe.md file is changed with github instructions"
 git push
+#next time, inorder to update local folder with contents in repository, use pull.
+git pull
 
 
