@@ -5,6 +5,7 @@
 git clone https://github.com/jerinka/Darknet-Detector-Class
 #edit the code,add files if needed
 cd into_cloned_folder
+git diff
 git status
 #you will see changes
 git add changed_file_names
