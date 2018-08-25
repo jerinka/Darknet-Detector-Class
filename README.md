@@ -1,7 +1,7 @@
 "# Darknet-Detector-Classifier-class" 
 
 
-git basic steps-
+#git basic steps-
 git clone https://github.com/jerinka/Darknet-Detector-Class
 #edit the code,add files if needed
 cd into_cloned_folder
