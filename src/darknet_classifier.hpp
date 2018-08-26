@@ -61,7 +61,7 @@ public :
 
 		options = read_data_cfg(datacfg);
 		name_list = option_find_str(options, "names", 0);
-		if(!name_list){ name_list = option_find_str(options, "labels", "data/capmask/labels.list");
+		if(!name_list){ name_list = option_find_str(options, "labels", "../../data/capmask/labels.list");
 			printf("#####%%%%%%%%%%%%%%%%%% \n");
 		}
 		classes = option_find_int(options, "classes", 2);
@@ -102,9 +102,9 @@ public :
 	}
 
 
-	int darknet_classifier(cv:: Mat img){
+	int darknet_classifier(cv::Mat img1){
 
-
+		cv::Mat img = img1.clone();
         cv::cvtColor(img, img, CV_BGR2RGB);
 		cv::resize(img, img, cv::Size(50,50));
 		IplImage* image2 = new IplImage(img);
@@ -126,8 +126,8 @@ public :
 
 		for(i = 0; i < top; ++i){
 		    int index = indexes[i];
-		    if(net.hierarchy) printf("%d, %s: %f, parent: %s \n",index, names[index], predictions[index], (net.hierarchy->parent[index] >= 0) ? names[net.hierarchy->parent[index]] : "Root");
-		    else printf("%s: %f\n",names[index], predictions[index] * 100);
+		    //if(net.hierarchy) printf("%d, %s: %f, parent: %s \n",index, names[index], predictions[index], (net.hierarchy->parent[index] >= 0) ? names[net.hierarchy->parent[index]] : "Root");
+		    //else printf("%s: %f\n",names[index], predictions[index] * 100);
 		}
 		
 		if(r.data != im.data)

@@ -1,7 +1,7 @@
 classes= 4
-train  = data/capmask/train.list
-valid  = data/capmask/test.list
-names =  data/capmask/labels.list
+train  = ../../data/capmask/train.list
+valid  = ../../data/capmask/test.list
+names =  ../../data/capmask/labels.list
 backup = weights/
 
 

@@ -251,6 +251,7 @@
     <ClInclude Include="..\..\src\classifier.h" />
     <ClInclude Include="..\..\src\col2im.h" />
     <ClInclude Include="..\..\src\connected_layer.h" />
+    <ClInclude Include="..\..\src\console_utils.h" />
     <ClInclude Include="..\..\src\convolutional_layer.h" />
     <ClInclude Include="..\..\src\cost_layer.h" />
     <ClInclude Include="..\..\src\crnn_layer.h" />

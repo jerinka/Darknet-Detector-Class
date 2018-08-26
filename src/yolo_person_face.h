@@ -62,9 +62,9 @@ public :
     //       double dist;
     //       double min_dist;// = frame.size().width;
 
-    yoloDetector yolo_detect_person = yoloDetector("data/tiny_yolo_person/coco.names", "data/tiny_yolo_person/yolov3-tiny.cfg", "data/tiny_yolo_person/yolov3-tiny.weights", 0.20);
-	yoloDetector yolo_detect_face = yoloDetector("data/tiny_yolo_face/face.names", "data/tiny_yolo_face/yolov3-tiny.cfg", "data/tiny_yolo_face/yolov3-tiny_71400.weights", 0.20);
-    Darknet_Classifier darknet_class = Darknet_Classifier("data/capmask/capmask.data", "data/capmask/capmask.cfg", "data/capmask/capmask_2000.weights");
+    yoloDetector yolo_detect_person = yoloDetector("../../data/tiny_yolo_person/coco.names", "../../data/tiny_yolo_person/yolov3-tiny.cfg", "../../data/tiny_yolo_person/yolov3-tiny.weights", 0.20);
+	yoloDetector yolo_detect_face = yoloDetector("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3_tiny_face_71400.weights", 0.20);
+    Darknet_Classifier darknet_class = Darknet_Classifier("../../data/capmask/capmask.data", "../../data/capmask/capmask.cfg", "../../data/capmask/capmask_75000.weights");
 
 
     YOLO_PERSON_FACE()
@@ -220,7 +220,7 @@ public :
 
         map_face_to_person(frame,roi_vec_person,roi_vec_face, person_info_vec);
 
-        person_info_vec = yolo_darknet_classifier(person_info_vec,frame.clone());
+        person_info_vec = yolo_darknet_classifier(person_info_vec,frame);
         //person_info_vec = yolo_track(frame,person_info_vec);
         person_info_vec = yolo_track_2(frame,person_info_vec);
 
@@ -967,7 +967,7 @@ std::vector<roi_data> yolo_track (Mat frame, std::vector<roi_data> person_info){
 
 #endif
 
-std::vector<roi_data> yolo_darknet_classifier (std::vector<roi_data> person_info, cv::Mat MatOriginal){
+std::vector<roi_data> yolo_darknet_classifier (std::vector<roi_data> & person_info, cv::Mat MatOriginal){
 
 #if 0		// uncomment for shivon 25/07/2018
     for(size_t i=0;i<person_info.size();i++)
@@ -1083,8 +1083,9 @@ std::vector<roi_data> yolo_darknet_classifier (std::vector<roi_data> person_info
             if(facerect.x + facerect.width > MatOriginal.size().width)
                 facerect.width = facerect.width - (facerect.x + facerect.width - MatOriginal.size().width);
 
+			person_info[i].face_rect = facerect;
             cv::Mat mat_crop = MatOriginal(facerect);
-            int face_index = darknet_class.darknet_classifier(mat_crop.clone());
+            int face_index = darknet_class.darknet_classifier(mat_crop);
             person_info[i].classification_result = face_index;
 
             cout << "CLASSIFICATION RESULT " << person_info[i].classification_result << endl;

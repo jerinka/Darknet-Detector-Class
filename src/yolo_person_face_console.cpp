@@ -3,15 +3,12 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-//#include <glob.h>
-//#include <iostream>
-//#include <string>
+#include "console_utils.h"
 
 int img_x = 0;
 int img_y = 0;
 int img_width = 480;   
 int img_height = 480;
-//#include "resnet_ssd_face.hpp"
 
 using namespace cv;
 using namespace std;
@@ -20,70 +17,6 @@ std::string save_file_name = "img_";
 std::string save_dest = "dataset/";
 int idx = 0;
 
-void SaveDataset(Mat frame, std::vector<cv::Rect> roi_vec) {
-
-	if (roi_vec.size() > 0) {
-		string image_name;
-		image_name.append(save_dest);
-		image_name.append(save_file_name);
-		image_name.append(std::to_string(idx));
-		image_name.append(".jpg");
-
-		string txt_name;
-		txt_name.append(save_dest);
-		txt_name.append(save_file_name);
-		txt_name.append(std::to_string(idx));
-		txt_name.append(".txt");
-
-		ofstream myfile;
-		myfile.open(txt_name);
-
-		cout << "image_name" << image_name << std::endl;
-		cout << "txt_name : " << txt_name << std::endl;
-
-		cv::imwrite(image_name, frame);
-
-		for (int i = 0; i < roi_vec.size(); i++) {
-			int x, y, w, h;
-			int frame_width, frame_height;
-
-			float new_x, new_y, new_w, new_h;
-
-			frame_width = frame.size().width;
-			frame_height = frame.size().height;
-			x = roi_vec[i].x;
-			y = roi_vec[i].y;
-			w = roi_vec[i].width;
-			h = roi_vec[i].height;
-
-			new_x = float(x) + float(w / 2);
-			new_y = float(y) + float(h / 2);
-
-			new_x = new_x / frame_width;
-			new_y = new_y / frame_height;
-
-			new_w = float(w) / frame_width;
-			new_h = float(h) / frame_height;
-
-			myfile << 0;
-			myfile << " ";
-			myfile << new_x;
-			myfile << " ";
-			myfile << new_y;
-			myfile << " ";
-
-			myfile << new_w;
-			myfile << " ";
-
-			myfile << new_h;
-			myfile << "\n";
-
-			std::cout << "new_x : " << new_x << "new_y : " << new_y << " new_w : " << new_w << "new_h: " << new_h << std::endl;
-		}
-		myfile.close();
-		idx++;
-	}
-}
 
 #if LIVE_CAMERA
 int main() {
@@ -159,21 +92,21 @@ int main(){
 
 	std::vector<roi_data> person_info;
 
-	String folder = "F:/Darknet/darknet_person_face_classifier_3/build/darknet/dataset/person_face/*.jpg";
+	String relativepath = "../../data/tiny_yolo_person/test";
 	vector<String> filenames;
-	glob(folder, filenames);
-	std::sort(filenames.begin(), filenames.end());
+	cu::ConsoleUtils::getImages(relativepath, filenames);
 	
 	cout << filenames.size() << endl;//to display no of files
 
-	for (int k = 0; k < 101; k++)
+	int on = 1;
+	while(on)
 	{
 		//YOLO_PERSON_FACE yolo_person_face;
 		for (int i = 0; i < filenames.size(); ++i)
 		{
 
 
-			cout << filenames[i] << endl;
+			//cout << filenames[i] << endl;
 			cameraFrame = cv::imread(filenames[i], CV_LOAD_IMAGE_COLOR);
 
 			if (!cameraFrame.data)                              // Check for invalid input
@@ -190,22 +123,43 @@ int main(){
 			//YOLO_PERSON_FACE yolo_person_face;
 			yolo_person_face.get_person_face_rect(mat_crop, person_info);
 
-			cout << " size of person_info : " << person_info.size() << endl;
+			//cout << " size of person_info : " << person_info.size() << endl;
 
-			if (person_info.size() > 0) {
-				cout << " size of person facde : " << person_info[0].face_rect.width << endl;
-			}
+			//if (person_info.size() > 0) {
+			//	cout << " size of person facde : " << person_info[0].face_rect.width << endl;
+			//}
 
 			for (int i = 0; i < person_info.size(); i++) {
 				cout << "Classification : " << person_info[0].classification_result << endl;
 				rectangle(mat_crop, cv::Rect(person_info[i].person_rect.x, person_info[i].person_rect.y, person_info[i].person_rect.width, person_info[i].person_rect.height), Scalar(0, 0, 255), 2);
 				rectangle(mat_crop, cv::Rect(person_info[i].face_rect.x, person_info[i].face_rect.y, person_info[i].face_rect.width, person_info[i].face_rect.height), Scalar(255, 0, 0), 2);
+
+				int index = person_info[i].classification_result;
+				char txt[50];
+				sprintf_s(txt, "C= %d", index);
+				//cout << txt << endl;
+				cv::putText(mat_crop,
+					txt,
+					cv::Point(person_info[i].face_rect.x, person_info[i].face_rect.y), // Coordinates
+					cv::FONT_HERSHEY_COMPLEX_SMALL, // Font
+					1, // Scale. 2.0 = 2x bigger
+					cv::Scalar(0, 0, 255), // BGR Color
+					1, // Line Thickness (Optional)
+					CV_AA); // Anti-alias (Optional)
+
+				sprintf_s(txt, "C= %d", person_info[i].person_id);
+				cv::putText(mat_crop,
+					txt,
+					cv::Point(person_info[i].face_rect.x, person_info[i].face_rect.br().y), // Coordinates
+					cv::FONT_HERSHEY_COMPLEX_SMALL, // Font
+					1, // Scale. 2.0 = 2x bigger
+					cv::Scalar(0, 0, 255), // BGR Color
+					1, // Line Thickness (Optional)
+					CV_AA); // Anti-alias (Optional)
+
 			}
 
 			imshow("LIVE", mat_crop);
-
-			if (waitKey(2) >= 0)
-				break;
 
 			auto end = std::chrono::steady_clock::now();
 			std::chrono::duration<double> spent = end - start;
@@ -213,7 +167,10 @@ int main(){
 			std::cout << " Time: " << spent.count() << " sec \n";
 			std::cout << " fps: " << 1 / spent.count() << " frames \n";
 			person_info.clear();
+
+			if ((char)27 == (char)waitKey(30)) { on = 0; break; }
 		}
+
 	}
  	return 0;
 
