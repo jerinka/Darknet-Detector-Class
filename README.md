@@ -18,6 +18,9 @@ git pull
 #edit code.
 
 
+#Running application:
+-please add weights into data/xx folder with name that is used in code.
+
 
 
 
