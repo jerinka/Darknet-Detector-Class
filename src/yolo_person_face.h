@@ -1,7 +1,6 @@
 #ifndef YOLO_PERSON_FACE_H
 #define YOLO_PERSON_FACE_H
 
-
 #include "yolo_detector.hpp"
 #include "darknet_classifier.hpp"
 
@@ -25,10 +24,10 @@ struct roi_data{
 };
 
 struct person_track{
-    cv::Rect face_rect,person_rect;
-    int person_id;
+	int person_id;
+	cv::Rect face_rect;
+	cv::Rect person_rect;
     std::vector<int> classification_result_vector;
-
     cv::Point cent;
     int face_count;
     bool frame_flag;
@@ -62,8 +61,8 @@ public :
     //       double dist;
     //       double min_dist;// = frame.size().width;
 
-    yoloDetector yolo_detect_person = yoloDetector("../../data/tiny_yolo_person/coco.names", "../../data/tiny_yolo_person/yolov3-tiny.cfg", "../../data/tiny_yolo_person/yolov3-tiny.weights", 0.20);
-	yoloDetector yolo_detect_face = yoloDetector("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3_tiny_face_71400.weights", 0.20);
+    yoloDetector yolo_detect_person = yoloDetector("../../data/tiny_yolo_person/coco.names", "../../data/tiny_yolo_person/yolov3_tiny.cfg", "../../data/tiny_yolo_person/yolov3_tiny.weights", 0.20);
+	yoloDetector yolo_detect_face = yoloDetector("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3_tiny_face_71400.weights", 0.20); 
     Darknet_Classifier darknet_class = Darknet_Classifier("../../data/capmask/capmask.data", "../../data/capmask/capmask.cfg", "../../data/capmask/capmask_75000.weights");
 
 
@@ -405,9 +404,6 @@ void push_person_track_result(roi_data person_info){
 }
 
 
-
-
-
 void decrement_update_g_tracklist(){
 #if 1
 
@@ -605,9 +601,6 @@ std::vector<roi_data> yolo_track_2 (Mat frame, std::vector<roi_data> person_info
 
 
 }
-
-
-///////////////// //////////// //////////////////////////////
 
 
 #if 0

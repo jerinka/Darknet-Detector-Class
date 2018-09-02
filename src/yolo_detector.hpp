@@ -32,16 +32,14 @@ class yoloDetector
 	std::string  cfg_file;// = "data/tiny_yolo_basic/yolov3-tiny.cfg";
 	std::string  weights_file;// = "data/tiny_yolo_basic/yolov3-tiny.weights";
 	std::string filename;// = "dog.jpg"; // "F:\\ObjectDetection\\darknet\\darknet_console\\scripts\\outpy.avi";
-
+	int gpuid = 0;
 	float const thresh = 0.20;
 
 	std::vector<std::string> obj_names;
 
 public:
 
-
-	Detector detector = Detector(cfg_file, weights_file);
-
+	Detector detector = Detector(cfg_file, weights_file, gpuid);
 
 	yoloDetector(std::string  names_file1, std::string  cfg_file1, std::string  weights_file1, float thresh1) :names_file(names_file1), weights_file(weights_file1), cfg_file(cfg_file1), thresh(thresh1)
 	{

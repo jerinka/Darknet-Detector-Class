@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-int main2(int argc, char *argv[])
+int main21(int argc, char *argv[])
 {
 	auto start = std::chrono::steady_clock::now();
 	std::vector<cv::Rect> roi_vec_person, roi_vec_face;
@@ -21,20 +21,26 @@ int main2(int argc, char *argv[])
 
 	cout << "Use webcam or Keep images in exe path, click enter to select next image" << endl<<endl;
 
-	int type1, type2;
+	int input_type, net_type;
 	cout << "Enter: 1- Webcam, 2- Image files " << endl;
-	cin >> type1;
+	//cin >> input_type;
+	input_type = 2;
 	cout << "Enter: 1- Tiny yolo face, 2- Tiny yolo person, 3- Yolov3" << endl;
-	cin >> type2;
+	//cin >> net_type;
+	net_type = 3;
+	
+
+	//yoloDetector yolodet1("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3_tiny_face_71400.weights", 0.20);
+	
 	std::shared_ptr<yoloDetector> yolodet(nullptr);
-	if (type2 == 1)
-		yolodet = make_shared<yoloDetector>("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3tiny_face_71400.weights", 0.20);
-	else if (type2 == 2)
-		yolodet = make_shared<yoloDetector>("../../data/tiny_yolo_person/coco.names", "../../data/tiny_yolo_person/yolov3-tiny.cfg", "../../data/tiny_yolo_person/yolov3-tiny.weights", 0.20);
+	if (net_type == 1)
+		yolodet = make_shared<yoloDetector>("../../data/tiny_yolo_face/face.names", "../../data/tiny_yolo_face/yolov3_tiny_face.cfg", "../../data/tiny_yolo_face/yolov3_tiny_face_71400.weights", 0.20);
+	else if (net_type == 2)
+		yolodet = make_shared<yoloDetector>("../../data/tiny_yolo_person/coco.names", "../../data/tiny_yolo_person/yolov3_tiny.cfg", "../../data/tiny_yolo_person/yolov3_tiny.weights", 0.20);
 	else
 		yolodet = make_shared<yoloDetector>("../../data/yolov3/coco.names", "../../data/yolov3/yolov3.cfg", "../../data/yolov3/yolov3.weights", 0.20);
 
-	if (type1 == 2) {
+	if (input_type == 2) {
 		for (int i = 0; i < filenames.size(); ++i)
 		{
 			cout << filenames[i] << endl;
@@ -62,6 +68,8 @@ int main2(int argc, char *argv[])
 			start = end;
 			std::cout << " Time: " << spent.count() << " sec \n";
 			std::cout << " fps: " << 1 / spent.count() << " sec \n";
+
+			cout << "press enter on image to select next image" << endl;
 
 			waitKey(0);
 		}
